@@ -1,0 +1,330 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}FarmLink — Connecting Farmers & Buyers{% endblock %}
+
+{% block content %}
+
+<!-- ═══════════════════════════════════════
+     HERO SECTION
+════════════════════════════════════════ -->
+<section class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="container hero-content">
+        <div class="row align-items-center min-vh-90">
+            <div class="col-lg-7">
+                <span class="hero-badge">
+                    <i class="bi bi-patch-check-fill"></i> Kenya's #1 Digital Farm Market
+                </span>
+                <h1 class="hero-title">
+                    Fresh From the <span class="text-gold">Farm</span>,<br>
+                    Direct to Your <span class="text-gold">Door</span>
+                </h1>
+                <p class="hero-subtitle">
+                    FarmLink connects small-scale farmers across Kenya directly with
+                    verified buyers — no middlemen, fair prices, real-time updates.
+                </p>
+                <div class="hero-cta-group">
+                    <a href="{% url 'accounts:register' %}" class="btn-hero-primary">
+                        <i class="bi bi-person-plus-fill"></i> Get Started Free
+                    </a>
+                    <a href="#how-it-works" class="btn-hero-outline">
+                        <i class="bi bi-play-circle-fill"></i> See How It Works
+                    </a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">500+</span>
+                        <span class="stat-label">Farmers</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <span class="stat-number">1,200+</span>
+                        <span class="stat-label">Buyers</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <span class="stat-number">8 Counties</span>
+                        <span class="stat-label">Covered</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5 d-none d-lg-block">
+                <div class="hero-card-float">
+                    <div class="float-card">
+                        <i class="bi bi-graph-up-arrow text-success fs-3"></i>
+                        <div>
+                            <div class="fw-bold text-dark">Maize Price Today</div>
+                            <div class="text-success fw-bold fs-5">KES 4,200 / 90kg</div>
+                        </div>
+                    </div>
+                    <div class="float-card mt-3">
+                        <i class="bi bi-bag-check-fill text-warning fs-3"></i>
+                        <div>
+                            <div class="fw-bold text-dark">New Order</div>
+                            <div class="text-muted small">John placed an order for 50kg Tomatoes</div>
+                        </div>
+                    </div>
+                    <div class="float-card mt-3">
+                        <i class="bi bi-shield-check text-success fs-3"></i>
+                        <div>
+                            <div class="fw-bold text-dark">Payment Secured</div>
+                            <div class="text-muted small">KES 12,500 — Potatoes order confirmed</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Wave divider -->
+    <div class="hero-wave">
+        <svg viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#F1F8E9" d="M0,40 C360,80 1080,0 1440,40 L1440,80 L0,80 Z"/>
+        </svg>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     MARQUEE — LIVE MARKET TICKER
+════════════════════════════════════════ -->
+<section class="ticker-section">
+    <div class="ticker-label">
+        <i class="bi bi-broadcast-pin"></i> LIVE PRICES
+    </div>
+    <div class="ticker-track">
+        <div class="ticker-items">
+            <span class="ticker-item"><i class="bi bi-arrow-up text-success"></i> Maize — KES 4,200/90kg</span>
+            <span class="ticker-item"><i class="bi bi-arrow-down text-danger"></i> Tomatoes — KES 1,800/crate</span>
+            <span class="ticker-item"><i class="bi bi-arrow-up text-success"></i> Potatoes — KES 3,500/50kg</span>
+            <span class="ticker-item"><i class="bi bi-dash text-warning"></i> Beans — KES 6,000/90kg</span>
+            <span class="ticker-item"><i class="bi bi-arrow-up text-success"></i> Onions — KES 2,200/50kg</span>
+            <span class="ticker-item"><i class="bi bi-arrow-down text-danger"></i> Cabbage — KES 800/bag</span>
+            <span class="ticker-item"><i class="bi bi-arrow-up text-success"></i> Avocado — KES 5,000/crate</span>
+            <span class="ticker-item"><i class="bi bi-arrow-up text-success"></i> Carrots — KES 1,500/50kg</span>
+            <!-- Duplicate for seamless loop -->
+            <span class="ticker-item"><i class="bi bi-arrow-up text-success"></i> Maize — KES 4,200/90kg</span>
+            <span class="ticker-item"><i class="bi bi-arrow-down text-danger"></i> Tomatoes — KES 1,800/crate</span>
+            <span class="ticker-item"><i class="bi bi-arrow-up text-success"></i> Potatoes — KES 3,500/50kg</span>
+            <span class="ticker-item"><i class="bi bi-dash text-warning"></i> Beans — KES 6,000/90kg</span>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     FEATURES — WHY FARMLINK
+════════════════════════════════════════ -->
+<section class="features-section py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="section-badge">Why FarmLink?</span>
+            <h2 class="section-heading">Everything You Need to <span class="text-green">Sell & Buy</span> Smarter</h2>
+            <p class="section-sub">Built specifically for Kenyan farmers and buyers — simple, fast, and fair.</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon" style="background:#E8F5E9;">
+                        <i class="bi bi-shop-window" style="color:#2E7D32;"></i>
+                    </div>
+                    <h5>Direct Market Access</h5>
+                    <p>Farmers list produce directly. Buyers browse and order instantly — no brokers taking your profit.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon" style="background:#FFF8E1;">
+                        <i class="bi bi-graph-up" style="color:#F9A825;"></i>
+                    </div>
+                    <h5>Live Market Prices</h5>
+                    <p>Real-time price updates for all major crops. Know what the market is paying before you sell.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon" style="background:#E8F5E9;">
+                        <i class="bi bi-shield-lock-fill" style="color:#2E7D32;"></i>
+                    </div>
+                    <h5>Secure Payments</h5>
+                    <p>Every transaction is recorded and protected. Full payment history for both farmers and buyers.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon" style="background:#FFF8E1;">
+                        <i class="bi bi-bell-fill" style="color:#F9A825;"></i>
+                    </div>
+                    <h5>SMS Notifications</h5>
+                    <p>Get instant SMS alerts when orders are placed, accepted, or payments are confirmed.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon" style="background:#E8F5E9;">
+                        <i class="bi bi-bar-chart-fill" style="color:#2E7D32;"></i>
+                    </div>
+                    <h5>Sales Reports</h5>
+                    <p>Track your earnings, order history, and produce performance with clear visual reports.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon" style="background:#FFF8E1;">
+                        <i class="bi bi-geo-alt-fill" style="color:#F9A825;"></i>
+                    </div>
+                    <h5>Kenya-Wide Coverage</h5>
+                    <p>Farmers and buyers from all 47 counties can connect, trade, and grow together on FarmLink.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     HOW IT WORKS
+════════════════════════════════════════ -->
+<section class="how-section py-5" id="how-it-works">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="section-badge">Simple Process</span>
+            <h2 class="section-heading">How <span class="text-green">FarmLink</span> Works</h2>
+        </div>
+        <div class="row g-0 justify-content-center">
+            <div class="col-md-3 text-center step-item">
+                <div class="step-circle">1</div>
+                <div class="step-line"></div>
+                <h6 class="mt-3 fw-bold">Create Account</h6>
+                <p class="text-muted small">Register as a Farmer or Buyer in under 2 minutes.</p>
+            </div>
+            <div class="col-md-3 text-center step-item">
+                <div class="step-circle">2</div>
+                <div class="step-line"></div>
+                <h6 class="mt-3 fw-bold">List or Browse</h6>
+                <p class="text-muted small">Farmers post produce. Buyers search and filter by crop, price, location.</p>
+            </div>
+            <div class="col-md-3 text-center step-item">
+                <div class="step-circle">3</div>
+                <div class="step-line"></div>
+                <h6 class="mt-3 fw-bold">Place & Confirm Orders</h6>
+                <p class="text-muted small">Buyers place orders. Farmers accept or reject with one click.</p>
+            </div>
+            <div class="col-md-3 text-center step-item">
+                <div class="step-circle">4</div>
+                <h6 class="mt-3 fw-bold">Get Paid</h6>
+                <p class="text-muted small">Payments recorded instantly. Full transaction history always available.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     PRODUCE PREVIEW CARDS
+════════════════════════════════════════ -->
+<section class="produce-section py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="section-badge">Market Today</span>
+            <h2 class="section-heading">Fresh Produce <span class="text-green">Available Now</span></h2>
+            <p class="section-sub">Sample listings from farmers on FarmLink right now.</p>
+        </div>
+        <div class="row g-4">
+            {% for item in sample_produce %}
+            <div class="col-md-3">
+                <div class="produce-card">
+                    <div class="produce-img-wrap">
+                        <span class="produce-badge-new">Available</span>
+                        <div class="produce-emoji">{{ item.emoji }}</div>
+                    </div>
+                    <div class="produce-body">
+                        <h6 class="produce-name">{{ item.name }}</h6>
+                        <p class="produce-farmer"><i class="bi bi-person-fill"></i> {{ item.farmer }}</p>
+                        <p class="produce-location"><i class="bi bi-geo-alt-fill"></i> {{ item.location }}</p>
+                        <div class="produce-footer">
+                            <span class="produce-price">KES {{ item.price }}</span>
+                            <span class="produce-qty">{{ item.qty }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-5">
+            <a href="{% url 'accounts:register' %}" class="btn-farmlink px-5 py-3 fs-6">
+                <i class="bi bi-basket-fill"></i> Browse All Produce — Register Free
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     CTA BANNER
+════════════════════════════════════════ -->
+<section class="cta-section">
+    <div class="container text-center">
+        <h2 class="cta-title">Ready to Transform How You <span class="text-gold">Farm & Trade?</span></h2>
+        <p class="cta-sub">Join thousands of Kenyan farmers and buyers already using FarmLink.</p>
+        <div class="cta-buttons">
+            <a href="{% url 'accounts:register' %}" class="btn-hero-primary me-3">
+                <i class="bi bi-person-plus-fill"></i> Join as Farmer
+            </a>
+            <a href="{% url 'accounts:register' %}" class="btn-gold px-4 py-3">
+                <i class="bi bi-cart-fill"></i> Join as Buyer
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     FOOTER
+════════════════════════════════════════ -->
+<footer class="farmlink-footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <h5 class="footer-brand"><i class="bi bi-flower1"></i> FarmLink</h5>
+                <p class="footer-desc">Connecting Kenya's small-scale farmers directly with buyers. Fair prices. No middlemen. Real impact.</p>
+            </div>
+            <div class="col-md-2 mb-4">
+                <h6 class="footer-heading">Platform</h6>
+                <ul class="footer-links">
+                    <li><a href="{% url 'accounts:register' %}">Register</a></li>
+                    <li><a href="{% url 'accounts:login' %}">Login</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3 mb-4">
+                <h6 class="footer-heading">For Farmers</h6>
+                <ul class="footer-links">
+                    <li><a href="#">Post Produce</a></li>
+                    <li><a href="#">Manage Orders</a></li>
+                    <li><a href="#">Sales Reports</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3 mb-4">
+                <h6 class="footer-heading">For Buyers</h6>
+                <ul class="footer-links">
+                    <li><a href="#">Browse Produce</a></li>
+                    <li><a href="#">Place Orders</a></li>
+                    <li><a href="#">Payment History</a></li>
+                </ul>
+            </div>
+        </div>
+        <hr style="border-color: rgba(255,255,255,0.1);">
+        <p class="text-center footer-copy">© 2026 FarmLink Kenya. Built to empower small-scale farmers.</p>
+    </div>
+</footer>
+
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            let target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    });
+</script>
+{% endblock %}

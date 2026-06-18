@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% block title %}Market — FarmLink{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <div>
+            <h3 class="section-title mb-1">
+                <i class="bi bi-shop-window"></i> FarmLink Market
+            </h3>
+            <p class="text-muted mb-0">{{ produce.count }} listing{{ produce.count|pluralize }} available right now</p>
+        </div>
+        {% if user.is_authenticated and user.is_farmer %}
+            <a href="{% url 'produce:post' %}" class="btn-farmlink">
+                <i class="bi bi-plus-circle"></i> Post Produce
+            </a>
+        {% endif %}
+    </div>
+
+    <!-- Search & Filter -->
+    <form method="GET" class="row g-2 mb-4">
+        <div class="col-md-6">
+            <input type="text" name="q" class="form-control"
+                placeholder="🔍 Search crop name..." value="{{ query }}">
+        </div>
+        <div class="col-md-4">
+            <select name="category" class="form-select">
+                <option value="">All Categories</option>
+                {% for val, label in categories %}
+                    <option value="{{ val }}" {% if category == val %}selected{% endif %}>
+                        {{ label }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn-farmlink w-100">Filter</button>
+        </div>
+    </form>
+
+    <!-- Produce Grid -->
+    {% if produce %}
+        <div class="row g-4">
+            {% for item in produce %}
+            <div class="col-md-3 col-sm-6">
+                <div class="produce-card">
+                    <!-- Image or placeholder -->
+                    <div class="produce-img-wrap">
+                        <span class="produce-badge-new">Available</span>
+                        {% if item.image %}
+                            <img src="{{ item.image.url }}" alt="{{ item.name }}"
+                                style="width:100%;height:130px;object-fit:cover;">
+                        {% else %}
+                            <div class="produce-emoji">🌾</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="produce-body">
+                        <span class="badge mb-2"
+                            style="background:#E8F5E9;color:#2E7D32;font-size:0.72rem;">
+                            {{ item.get_category_display }}
+                        </span>
+                        <h6 class="produce-name">{{ item.name }}</h6>
+                        <p class="produce-farmer">
+                            <i class="bi bi-person-fill"></i> {{ item.farmer.get_full_name|default:item.farmer.username }}
+                        </p>
+                        <p class="produce-location">
+                            <i class="bi bi-geo-alt-fill"></i> {{ item.location }}
+                        </p>
+                        <p class="produce-location">
+                            <i class="bi bi-box-seam"></i> {{ item.quantity }} {{ item.unit }} available
+                        </p>
+                        <div class="produce-footer">
+                            <span class="produce-price">KES {{ item.price }}</span>
+                            <span class="produce-qty">per {{ item.unit }}</span>
+                        </div>
+
+                        {% if user.is_authenticated and user.is_buyer %}
+    <a href="{% url 'orders:place' item.pk %}"
+        class="btn-farmlink w-100 mt-3 text-center d-block"
+        style="font-size:0.85rem;padding:8px;">
+        <i class="bi bi-cart-plus"></i> Place Order
+    </a>
+{% endif %}
+
+                        {% if user.is_authenticated and user.is_farmer and item.farmer == user %}
+                            <div class="d-flex gap-2 mt-3">
+                                <a href="{% url 'produce:toggle' item.pk %}"
+                                    class="btn btn-sm btn-outline-warning flex-fill">
+                                    <i class="bi bi-toggle-on"></i> Toggle
+                                </a>
+                                <a href="{% url 'produce:delete' item.pk %}"
+                                    class="btn btn-sm btn-outline-danger flex-fill"
+                                    onclick="return confirm('Remove this listing?')">
+                                    <i class="bi bi-trash"></i> Remove
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center py-5">
+            <div style="font-size:4rem;">🌾</div>
+            <h5 class="text-muted mt-3">No produce listed yet.</h5>
+            {% if user.is_authenticated and user.is_farmer %}
+                <a href="{% url 'produce:post' %}" class="btn-farmlink mt-3">
+                    Post the First Listing
+                </a>
+            {% endif %}
+        </div>
+    {% endif %}
+
+</div>
+{% endblock %}

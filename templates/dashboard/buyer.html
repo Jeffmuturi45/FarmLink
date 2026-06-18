@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+{% block title %}Buyer Dashboard — FarmLink{% endblock %}
+
+{% block content %}
+<div class="dashboard-layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-profile">
+            {% if user.profile_photo %}
+                <img src="{{ user.profile_photo.url }}" class="sidebar-avatar">
+            {% else %}
+                <div class="sidebar-avatar-placeholder">
+                    <i class="bi bi-person-fill"></i>
+                </div>
+            {% endif %}
+            <div class="sidebar-name">{{ user.get_full_name|default:user.username }}</div>
+            <div class="sidebar-role">🛒 Buyer</div>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="{% url 'dashboard:buyer' %}" class="sidebar-link active">
+                <i class="bi bi-speedometer2"></i> Dashboard
+            </a>
+            <a href="{% url 'produce:list' %}" class="sidebar-link">
+                <i class="bi bi-shop-window"></i> Browse Market
+            </a>
+            <a href="{% url 'accounts:profile' %}" class="sidebar-link">
+                <i class="bi bi-person-circle"></i> My Profile
+            </a>
+            <a href="{% url 'accounts:logout' %}" class="sidebar-link sidebar-logout">
+                <i class="bi bi-box-arrow-right"></i> Logout
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main content -->
+    <main class="dashboard-main">
+
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+            <div>
+                <h3 class="section-title mb-1">
+                    <i class="bi bi-cart-fill"></i> Buyer Dashboard
+                </h3>
+                <p class="text-muted mb-0">
+                    <i class="bi bi-geo-alt-fill text-success"></i>
+                    {{ user.location|default:"Location not set" }}
+                </p>
+            </div>
+            <a href="{% url 'produce:list' %}" class="btn-farmlink">
+                <i class="bi bi-shop-window"></i> Browse Market
+            </a>
+        </div>
+
+        <!-- Summary cards -->
+        <div class="row g-3 mb-5">
+            <div class="col-md-4 col-6">
+                <div class="summary-card" style="border-top-color:#2E7D32;">
+                    <div class="summary-icon" style="background:#E8F5E9;color:#2E7D32;">
+                        <i class="bi bi-bag-fill"></i>
+                    </div>
+                    <div class="summary-number">{{ total_orders }}</div>
+                    <div class="summary-label">Total Orders</div>
+                </div>
+            </div>
+            <div class="col-md-4 col-6">
+                <div class="summary-card" style="border-top-color:#F9A825;">
+                    <div class="summary-icon" style="background:#FFF8E1;color:#F9A825;">
+                        <i class="bi bi-hourglass-split"></i>
+                    </div>
+                    <div class="summary-number">{{ pending_orders }}</div>
+                    <div class="summary-label">Pending</div>
+                </div>
+            </div>
+            <div class="col-md-4 col-6">
+                <div class="summary-card" style="border-top-color:#1565C0;">
+                    <div class="summary-icon" style="background:#E3F2FD;color:#1565C0;">
+                        <i class="bi bi-check-circle-fill"></i>
+                    </div>
+                    <div class="summary-number">{{ accepted_orders }}</div>
+                    <div class="summary-label">Accepted</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fresh from market -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="section-title mb-0">
+                <i class="bi bi-shop-window"></i> Fresh From the Market
+            </h5>
+            <a href="{% url 'produce:list' %}" class="text-success small fw-bold">
+                View All <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+
+        {% if market_produce %}
+            <div class="row g-3 mb-5">
+                {% for item in market_produce %}
+                <div class="col-md-3 col-sm-6">
+                    <div class="produce-card">
+                        <div class="produce-img-wrap">
+                            <span class="produce-badge-new">Available</span>
+                            {% if item.image %}
+                                <img src="{{ item.image.url }}" alt="{{ item.name }}"
+                                    style="width:100%;height:130px;object-fit:cover;">
+                            {% else %}
+                                <div class="produce-emoji">🌾</div>
+                            {% endif %}
+                        </div>
+                        <div class="produce-body">
+                            <h6 class="produce-name">{{ item.name }}</h6>
+                            <p class="produce-farmer">
+                                <i class="bi bi-person-fill"></i>
+                                {{ item.farmer.get_full_name|default:item.farmer.username }}
+                            </p>
+                            <p class="produce-location">
+                                <i class="bi bi-geo-alt-fill"></i> {{ item.location }}
+                            </p>
+                            <div class="produce-footer">
+                                <span class="produce-price">KES {{ item.price }}</span>
+                                <span class="produce-qty">per {{ item.unit }}</span>
+                            </div>
+                            <a href="{% url 'orders:place' item.pk %}"
+                                class="btn-farmlink w-100 mt-3 text-center d-block"
+                                style="font-size:0.85rem;padding:8px;">
+                                <i class="bi bi-cart-plus"></i> Order Now
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state mb-5">
+                <div style="font-size:3rem;">🛒</div>
+                <p class="text-muted mt-2">No produce available right now.</p>
+            </div>
+        {% endif %}
+
+        <!-- My Orders -->
+        <h5 class="section-title"><i class="bi bi-receipt"></i> My Orders</h5>
+        {% if my_orders %}
+            <div class="table-responsive">
+                <table class="table table-hover align-middle farmlink-table">
+                    <thead>
+                        <tr>
+                            <th>#</th><th>Produce</th><th>Farmer</th>
+                            <th>Quantity</th><th>Total (KES)</th>
+                            <th>Date</th><th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in my_orders %}
+                        <tr>
+                            <td>#{{ order.pk }}</td>
+                            <td><strong>{{ order.produce.name }}</strong></td>
+                            <td>{{ order.produce.farmer.get_full_name|default:order.produce.farmer.username }}</td>
+                            <td>{{ order.quantity }} {{ order.produce.unit }}</td>
+                            <td class="text-success fw-bold">{{ order.total_price }}</td>
+                            <td>{{ order.ordered_at|date:"d M Y" }}</td>
+                            <td>
+                                <span class="status-badge status-{{ order.status }}">
+                                    {{ order.get_status_display }}
+                                </span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <div style="font-size:3rem;">📋</div>
+                <p class="text-muted mt-2">No orders placed yet.</p>
+                <a href="{% url 'produce:list' %}" class="btn-farmlink mt-2">Browse Market</a>
+            </div>
+        {% endif %}
+
+    </main>
+</div>
+{% endblock %}

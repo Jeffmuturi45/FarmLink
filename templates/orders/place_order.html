@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block title %}Place Order — FarmLink{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="auth-card">
+                <h2 class="mb-1">
+                    <i class="bi bi-cart-plus-fill text-success"></i> Place Order
+                </h2>
+                <p class="subtitle">You are ordering from <strong>{{ produce.farmer.get_full_name|default:produce.farmer.username }}</strong></p>
+
+                <!-- Produce summary -->
+                <div class="p-3 mb-4 rounded" style="background:#F1F8E9;border:1px solid #A5D6A7;">
+                    <div class="d-flex justify-content-between">
+                        <span class="fw-bold text-success">{{ produce.name }}</span>
+                        <span class="fw-bold">KES {{ produce.price }} / {{ produce.unit }}</span>
+                    </div>
+                    <small class="text-muted">
+                        <i class="bi bi-geo-alt-fill"></i> {{ produce.location }} &nbsp;|&nbsp;
+                        <i class="bi bi-box-seam"></i> {{ produce.quantity }} {{ produce.unit }} available
+                    </small>
+                </div>
+
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Quantity ({{ produce.unit }})</label>
+                        <input type="number" name="quantity" class="form-control"
+                            placeholder="How much do you need?"
+                            max="{{ produce.quantity }}" step="0.01" required>
+                        <small class="text-muted">Max: {{ produce.quantity }} {{ produce.unit }}</small>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Note to Farmer <span class="text-muted">(optional)</span></label>
+                        <textarea name="note" class="form-control" rows="2"
+                            placeholder="Any special instructions..."></textarea>
+                    </div>
+
+                    <!-- Live total calculator -->
+                    <div class="p-3 mb-3 rounded text-center" style="background:#E8F5E9;">
+                        <span class="text-muted small">Estimated Total</span>
+                        <div class="fw-bold fs-4 text-success" id="total-display">KES 0.00</div>
+                    </div>
+
+                    <button type="submit" class="btn-farmlink w-100">
+                        <i class="bi bi-check-circle-fill"></i> Confirm Order
+                    </button>
+                    <a href="{% url 'produce:list' %}" class="btn btn-outline-secondary w-100 mt-2">
+                        Cancel
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Live price calculator
+    let pricePerUnit = {{ produce.price }};
+    let qtyInput     = document.querySelector('input[name="quantity"]');
+    let totalDisplay = document.getElementById('total-display');
+
+    function updateTotal() {
+        let qty   = parseFloat(qtyInput.value) || 0;
+        let total = qty * pricePerUnit;
+        totalDisplay.textContent = 'KES ' + total.toLocaleString('en-KE', {
+            minimumFractionDigits: 2
+        });
+    }
+
+    qtyInput.addEventListener('input', updateTotal);
+</script>
+{% endblock %}

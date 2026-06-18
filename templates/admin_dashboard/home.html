@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+{% block title %}Admin Dashboard — FarmLink{% endblock %}
+
+{% block content %}
+<div class="dashboard-layout">
+
+    <aside class="sidebar">
+        <div class="sidebar-profile">
+            <div class="sidebar-avatar-placeholder">
+                <i class="bi bi-shield-fill-check"></i>
+            </div>
+            <div class="sidebar-name">{{ user.username }}</div>
+            <div class="sidebar-role">⚙️ Admin</div>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="{% url 'admin_dashboard:home' %}" class="sidebar-link active">
+                <i class="bi bi-speedometer2"></i> Overview
+            </a>
+            <a href="{% url 'admin_dashboard:users' %}" class="sidebar-link">
+                <i class="bi bi-people-fill"></i> Manage Users
+            </a>
+            <a href="{% url 'admin_dashboard:produce' %}" class="sidebar-link">
+                <i class="bi bi-box-seam-fill"></i> Manage Produce
+            </a>
+            <a href="{% url 'admin_dashboard:orders' %}" class="sidebar-link">
+                <i class="bi bi-receipt"></i> Manage Orders
+            </a>
+            <a href="{% url 'admin:index' %}" class="sidebar-link">
+                <i class="bi bi-gear-fill"></i> Django Admin
+            </a>
+            <a href="{% url 'accounts:logout' %}" class="sidebar-link sidebar-logout">
+                <i class="bi bi-box-arrow-right"></i> Logout
+            </a>
+        </nav>
+    </aside>
+
+    <main class="dashboard-main">
+        <h3 class="section-title mb-4"><i class="bi bi-shield-fill-check"></i> Admin Overview</h3>
+
+        <!-- Summary cards -->
+        <div class="row g-3 mb-5">
+            <div class="col-md-2 col-6">
+                <div class="summary-card" style="border-top-color:#2E7D32;">
+                    <div class="summary-icon" style="background:#E8F5E9;color:#2E7D32;">
+                        <i class="bi bi-people-fill"></i>
+                    </div>
+                    <div class="summary-number">{{ total_users }}</div>
+                    <div class="summary-label">Total Users</div>
+                </div>
+            </div>
+            <div class="col-md-2 col-6">
+                <div class="summary-card" style="border-top-color:#388E3C;">
+                    <div class="summary-icon" style="background:#E8F5E9;color:#388E3C;">
+                        <i class="bi bi-person-fill"></i>
+                    </div>
+                    <div class="summary-number">{{ total_farmers }}</div>
+                    <div class="summary-label">Farmers</div>
+                </div>
+            </div>
+            <div class="col-md-2 col-6">
+                <div class="summary-card" style="border-top-color:#F9A825;">
+                    <div class="summary-icon" style="background:#FFF8E1;color:#F9A825;">
+                        <i class="bi bi-cart-fill"></i>
+                    </div>
+                    <div class="summary-number">{{ total_buyers }}</div>
+                    <div class="summary-label">Buyers</div>
+                </div>
+            </div>
+            <div class="col-md-2 col-6">
+                <div class="summary-card" style="border-top-color:#1565C0;">
+                    <div class="summary-icon" style="background:#E3F2FD;color:#1565C0;">
+                        <i class="bi bi-box-seam-fill"></i>
+                    </div>
+                    <div class="summary-number">{{ total_produce }}</div>
+                    <div class="summary-label">Listings</div>
+                </div>
+            </div>
+            <div class="col-md-2 col-6">
+                <div class="summary-card" style="border-top-color:#6A1B9A;">
+                    <div class="summary-icon" style="background:#F3E5F5;color:#6A1B9A;">
+                        <i class="bi bi-bag-fill"></i>
+                    </div>
+                    <div class="summary-number">{{ total_orders }}</div>
+                    <div class="summary-label">Orders</div>
+                </div>
+            </div>
+            <div class="col-md-2 col-6">
+                <div class="summary-card" style="border-top-color:#C62828;">
+                    <div class="summary-icon" style="background:#FFEBEE;color:#C62828;">
+                        <i class="bi bi-hourglass-split"></i>
+                    </div>
+                    <div class="summary-number">{{ pending_orders }}</div>
+                    <div class="summary-label">Pending</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <!-- Recent Users -->
+            <div class="col-md-6">
+                <div class="admin-panel-card">
+                    <div class="admin-panel-header">
+                        <i class="bi bi-people-fill"></i> Recent Users
+                        <a href="{% url 'admin_dashboard:users' %}" class="float-end text-success small">View All</a>
+                    </div>
+                    <table class="table table-sm farmlink-table mb-0">
+                        <thead>
+                            <tr><th>Username</th><th>Role</th><th>Joined</th><th>Active</th></tr>
+                        </thead>
+                        <tbody>
+                            {% for u in recent_users %}
+                            <tr>
+                                <td>{{ u.username }}</td>
+                                <td>
+                                    <span class="status-badge"
+                                        style="background:#E8F5E9;color:#2E7D32;">
+                                        {{ u.get_role_display }}
+                                    </span>
+                                </td>
+                                <td>{{ u.date_joined|date:"d M Y" }}</td>
+                                <td>
+                                    {% if u.is_active %}
+                                        <i class="bi bi-check-circle-fill text-success"></i>
+                                    {% else %}
+                                        <i class="bi bi-x-circle-fill text-danger"></i>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Recent Orders -->
+            <div class="col-md-6">
+                <div class="admin-panel-card">
+                    <div class="admin-panel-header">
+                        <i class="bi bi-receipt"></i> Recent Orders
+                        <a href="{% url 'admin_dashboard:orders' %}" class="float-end text-success small">View All</a>
+                    </div>
+                    <table class="table table-sm farmlink-table mb-0">
+                        <thead>
+                            <tr><th>#</th><th>Produce</th><th>Buyer</th><th>Status</th></tr>
+                        </thead>
+                        <tbody>
+                            {% for order in recent_orders %}
+                            <tr>
+                                <td>#{{ order.pk }}</td>
+                                <td>{{ order.produce.name }}</td>
+                                <td>{{ order.buyer.username }}</td>
+                                <td>
+                                    <span class="status-badge status-{{ order.status }}">
+                                        {{ order.get_status_display }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>
+{% endblock %}
