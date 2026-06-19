@@ -3,11 +3,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Order
 from produce.models import Produce
+from notifications.utils import notify
 
 
 @login_required
 def place_order(request, produce_pk):
-    # Only buyers can place orders
     if not request.user.is_buyer:
         messages.error(request, 'Only buyers can place orders.')
         return redirect('produce:list')
@@ -17,7 +17,6 @@ def place_order(request, produce_pk):
     if request.method == 'POST':
         quantity = request.POST.get('quantity')
         note = request.POST.get('note', '')
-
         try:
             quantity = float(quantity)
             if quantity <= 0:
@@ -30,12 +29,21 @@ def place_order(request, produce_pk):
             messages.error(request, 'Enter a valid quantity.')
             return redirect('produce:list')
 
-        Order.objects.create(
+        order = Order.objects.create(
             buyer=request.user,
             produce=produce,
             quantity=quantity,
             note=note,
         )
+
+        # Notify farmer
+        notify(
+            recipient=produce.farmer,
+            title='New Order Received',
+            message=f'{request.user.username} ordered {quantity} {produce.unit} of {produce.name}.',
+            notif_type='order_placed',
+        )
+
         messages.success(
             request, f'Order placed for {produce.name}! Waiting for farmer to confirm.')
         return redirect('dashboard:buyer')
@@ -45,14 +53,26 @@ def place_order(request, produce_pk):
 
 @login_required
 def update_order_status(request, pk, action):
-    # Only the farmer who owns the produce can accept/reject
     order = get_object_or_404(Order, pk=pk, produce__farmer=request.user)
 
     if action == 'accept':
         order.status = 'accepted'
+        notify(
+            recipient=order.buyer,
+            title='Order Accepted ✅',
+            message=f'Your order for {order.produce.name} has been accepted by {request.user.username}.',
+            notif_type='order_accepted',
+        )
         messages.success(request, f'Order #{order.pk} accepted.')
+
     elif action == 'reject':
         order.status = 'rejected'
+        notify(
+            recipient=order.buyer,
+            title='Order Rejected ❌',
+            message=f'Your order for {order.produce.name} was rejected by {request.user.username}.',
+            notif_type='order_rejected',
+        )
         messages.warning(request, f'Order #{order.pk} rejected.')
 
     order.save()

@@ -28,12 +28,12 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            if user.is_farmer:
+            if user.is_staff:
+                return redirect('admin_dashboard:home')
+            elif user.is_farmer:
                 return redirect('dashboard:farmer')
             elif user.is_buyer:
                 return redirect('dashboard:buyer')
-            elif user.is_admin_user:
-                return redirect('admin_dashboard:home')
         else:
             messages.error(request, 'Invalid username or password.')
     return render(request, 'accounts/login.html')

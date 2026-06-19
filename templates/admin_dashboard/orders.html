@@ -1,68 +1,35 @@
-{% extends 'base.html' %}
-{% block title %}Manage Orders — FarmLink Admin{% endblock %}
+{% extends 'admin_dashboard/base_admin.html' %}
+{% block title %}Manage Orders — FarmLink{% endblock %}
+{% block nav_orders %}active{% endblock %}
 
-{% block content %}
-<div class="dashboard-layout">
-    <aside class="sidebar">
-        <div class="sidebar-profile">
-            <div class="sidebar-avatar-placeholder">
-                <i class="bi bi-shield-fill-check"></i>
-            </div>
-            <div class="sidebar-name">{{ user.username }}</div>
-            <div class="sidebar-role">⚙️ Admin</div>
-        </div>
-        <nav class="sidebar-nav">
-            <a href="{% url 'admin_dashboard:home' %}" class="sidebar-link">
-                <i class="bi bi-speedometer2"></i> Overview
-            </a>
-            <a href="{% url 'admin_dashboard:users' %}" class="sidebar-link">
-                <i class="bi bi-people-fill"></i> Manage Users
-            </a>
-            <a href="{% url 'admin_dashboard:produce' %}" class="sidebar-link">
-                <i class="bi bi-box-seam-fill"></i> Manage Produce
-            </a>
-            <a href="{% url 'admin_dashboard:orders' %}" class="sidebar-link active">
-                <i class="bi bi-receipt"></i> Manage Orders
-            </a>
-            <a href="{% url 'admin:index' %}" class="sidebar-link">
-                <i class="bi bi-gear-fill"></i> Django Admin
-            </a>
-            <a href="{% url 'accounts:logout' %}" class="sidebar-link sidebar-logout">
-                <i class="bi bi-box-arrow-right"></i> Logout
-            </a>
-        </nav>
-    </aside>
-
-    <main class="dashboard-main">
-        <h3 class="section-title mb-4"><i class="bi bi-receipt"></i> All Orders</h3>
-        <div class="table-responsive">
-            <table class="table table-hover align-middle farmlink-table">
-                <thead>
-                    <tr>
-                        <th>#</th><th>Produce</th><th>Farmer</th><th>Buyer</th>
-                        <th>Quantity</th><th>Total (KES)</th><th>Date</th><th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for order in orders %}
-                    <tr>
-                        <td>#{{ order.pk }}</td>
-                        <td><strong>{{ order.produce.name }}</strong></td>
-                        <td>{{ order.produce.farmer.username }}</td>
-                        <td>{{ order.buyer.username }}</td>
-                        <td>{{ order.quantity }} {{ order.produce.unit }}</td>
-                        <td class="text-success fw-bold">{{ order.total_price }}</td>
-                        <td>{{ order.ordered_at|date:"d M Y" }}</td>
-                        <td>
-                            <span class="status-badge status-{{ order.status }}">
-                                {{ order.get_status_display }}
-                            </span>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </main>
+{% block admin_content %}
+<h3 class="section-title mb-4"><i class="bi bi-receipt"></i> All Orders</h3>
+<div class="table-responsive">
+    <table class="table table-hover align-middle farmlink-table">
+        <thead>
+            <tr>
+                <th>#</th><th>Produce</th><th>Farmer</th><th>Buyer</th>
+                <th>Quantity</th><th>Total (KES)</th><th>Date</th><th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td>#{{ order.pk }}</td>
+                <td><strong>{{ order.produce.name }}</strong></td>
+                <td>{{ order.produce.farmer.username }}</td>
+                <td>{{ order.buyer.username }}</td>
+                <td>{{ order.quantity }} {{ order.produce.unit }}</td>
+                <td class="text-success fw-bold">{{ order.total_price }}</td>
+                <td>{{ order.ordered_at|date:"d M Y" }}</td>
+                <td>
+                    <span class="status-badge status-{{ order.status }}">
+                        {{ order.get_status_display }}
+                    </span>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 {% endblock %}

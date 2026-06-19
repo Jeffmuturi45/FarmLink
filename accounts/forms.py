@@ -30,3 +30,7 @@ class ProfileForm(forms.ModelForm):
             'phone':      forms.TextInput(attrs={'placeholder': 'e.g. 0712345678'}),
             'location':   forms.TextInput(attrs={'placeholder': 'e.g. Nakuru'}),
         }
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model  = CustomUser
+        fields = ['first_name', 'last_name', 'email', 'phone', 'location', 'profile_photo']

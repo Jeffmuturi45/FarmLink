@@ -7,32 +7,18 @@ from orders.models import Order
 
 @staff_member_required
 def admin_home(request):
-    # Summary stats
-    total_users = CustomUser.objects.count()
-    total_farmers = CustomUser.objects.filter(role='farmer').count()
-    total_buyers = CustomUser.objects.filter(role='buyer').count()
-    total_produce = Produce.objects.count()
-    total_orders = Order.objects.count()
-    pending_orders = Order.objects.filter(status='pending').count()
-
-    # Recent activity
-    recent_users = CustomUser.objects.order_by('-date_joined')[:8]
-    recent_orders = Order.objects.select_related(
-        'buyer', 'produce', 'produce__farmer'
-    ).order_by('-ordered_at')[:10]
-    recent_produce = Produce.objects.select_related(
-        'farmer').order_by('-date_posted')[:8]
-
     return render(request, 'admin_dashboard/home.html', {
-        'total_users':    total_users,
-        'total_farmers':  total_farmers,
-        'total_buyers':   total_buyers,
-        'total_produce':  total_produce,
-        'total_orders':   total_orders,
-        'pending_orders': pending_orders,
-        'recent_users':   recent_users,
-        'recent_orders':  recent_orders,
-        'recent_produce': recent_produce,
+        'total_users':    CustomUser.objects.count(),
+        'total_farmers':  CustomUser.objects.filter(role='farmer').count(),
+        'total_buyers':   CustomUser.objects.filter(role='buyer').count(),
+        'total_produce':  Produce.objects.count(),
+        'total_orders':   Order.objects.count(),
+        'pending_orders': Order.objects.filter(status='pending').count(),
+        'recent_users':   CustomUser.objects.order_by('-date_joined')[:8],
+        'recent_orders':  Order.objects.select_related(
+            'buyer', 'produce', 'produce__farmer'
+        ).order_by('-ordered_at')[:10],
+        'recent_produce': Produce.objects.select_related('farmer').order_by('-date_posted')[:8],
     })
 
 
@@ -57,7 +43,7 @@ def manage_produce(request):
 
 
 @staff_member_required
-def delete_produce(request, pk):
+def admin_delete_produce(request, pk):
     produce = get_object_or_404(Produce, pk=pk)
     produce.delete()
     return redirect('admin_dashboard:produce')

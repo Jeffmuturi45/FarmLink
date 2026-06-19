@@ -809,3 +809,109 @@ body {
     .sidebar { width: 100%; min-height: auto; }
     .dashboard-main { padding: 20px 16px; }
 }
+
+
+/* ══════════════════════════════
+   NOTIFICATIONS
+══════════════════════════════ */
+.notif-dot {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background: #C62828;
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: 700;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #2E7D32;
+}
+
+.notif-dropdown {
+    width: 340px;
+    border: none;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.notif-header {
+    background: #1B5E20;
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notif-clear {
+    color: var(--gold);
+    font-size: 0.78rem;
+    text-decoration: none;
+}
+
+.notif-clear:hover { color: #fff; }
+
+.notif-list { max-height: 360px; overflow-y: auto; }
+
+.notif-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 16px;
+    text-decoration: none;
+    color: inherit;
+    border-bottom: 1px solid #f5f5f5;
+    transition: background 0.15s;
+}
+
+.notif-item:hover { background: #F9FBF9; }
+
+.notif-unread { background: #F1F8E9; }
+
+.notif-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.notif-order_placed   { background:#E8F5E9; color:#2E7D32; }
+.notif-order_accepted { background:#E3F2FD; color:#1565C0; }
+.notif-order_rejected { background:#FFEBEE; color:#C62828; }
+.notif-general        { background:#FFF8E1; color:#F9A825; }
+
+.notif-title {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: #1a1a1a;
+}
+
+.notif-msg {
+    font-size: 0.78rem;
+    color: #666;
+    margin-top: 2px;
+}
+
+.notif-time {
+    font-size: 0.72rem;
+    color: #aaa;
+    margin-top: 3px;
+}
+
+.notif-empty {
+    text-align: center;
+    padding: 24px;
+    color: #aaa;
+    font-size: 0.85rem;
+}

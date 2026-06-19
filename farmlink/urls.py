@@ -28,6 +28,7 @@ urlpatterns = [
     path('produce/', include('produce.urls')),
     path('orders/', include('orders.urls')),
     path('admin-panel/', include('admin_dashboard.urls')),
+    path('notifications/', include('notifications.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

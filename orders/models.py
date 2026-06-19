@@ -12,18 +12,14 @@ class Order(models.Model):
         ('completed', 'Completed'),
     ]
 
-    buyer = models.ForeignKey(
-        CustomUser, on_delete=models.CASCADE, related_name='orders')
-    produce = models.ForeignKey(
-        Produce, on_delete=models.CASCADE, related_name='orders')
-    quantity = models.DecimalField(max_digits=10, decimal_places=2)
-    total_price = models.DecimalField(
-        max_digits=12, decimal_places=2, blank=True, null=True)
-    status = models.CharField(
-        max_length=10, choices=STATUS_CHOICES, default='pending')
-    note = models.TextField(blank=True)
-    ordered_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    buyer       = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='orders')
+    produce     = models.ForeignKey(Produce, on_delete=models.CASCADE, related_name='orders')
+    quantity    = models.DecimalField(max_digits=10, decimal_places=2)
+    total_price = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
+    status      = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
+    note        = models.TextField(blank=True)
+    ordered_at  = models.DateTimeField(auto_now_add=True)
+    updated_at  = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ['-ordered_at']
@@ -32,8 +28,6 @@ class Order(models.Model):
         return f"Order #{self.pk} — {self.buyer.username} → {self.produce.name}"
 
     def save(self, *args, **kwargs):
-        # Both values are Decimal — no type mismatch
         if self.quantity and self.produce_id:
-            self.total_price = Decimal(
-                str(self.quantity)) * Decimal(str(self.produce.price))
+            self.total_price = Decimal(str(self.quantity)) * Decimal(str(self.produce.price))
         super().save(*args, **kwargs)
